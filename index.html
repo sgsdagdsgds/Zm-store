@@ -560,7 +560,7 @@
 
     .profile-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
 
-    .menu-list { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; }
+    .menu-list { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; margin-bottom: 12px; }
     .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border-color); cursor: pointer; color: #fff; font-size: 13px; font-weight: 600; }
     .menu-item:last-child { border-bottom: none; }
 
@@ -785,10 +785,22 @@
       </div>
     </div>
 
-    <h3 style="font-size: 13px; font-weight: 800; margin: 16px 0 10px; text-transform: uppercase; color: var(--text-muted);">История заказов</h3>
-    <div id="history-list"></div>
-
-    <div class="menu-list" style="margin-top: 16px;">
+    <!-- ДОБАВЛЕННЫЕ КНОПКИ В ПРОФИЛЬ -->
+    <div class="menu-list">
+      <div class="menu-item" onclick="openReviewsLink()">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i data-lucide="star" style="width: 18px; color: var(--warning);"></i>
+          <span>Отзывы и гарантии</span>
+        </div>
+        <i data-lucide="external-link" style="width: 16px; color: var(--text-muted);"></i>
+      </div>
+      <div class="menu-item" onclick="openFaqLink()">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i data-lucide="help-circle" style="width: 18px; color: var(--text-muted);"></i>
+          <span>Правила и FAQ</span>
+        </div>
+        <i data-lucide="external-link" style="width: 16px; color: var(--text-muted);"></i>
+      </div>
       <div class="menu-item" onclick="openManagerChat()">
         <div style="display: flex; align-items: center; gap: 10px;">
           <i data-lucide="message-square" style="width: 18px; color: var(--text-muted);"></i>
@@ -797,6 +809,9 @@
         <i data-lucide="external-link" style="width: 16px; color: var(--text-muted);"></i>
       </div>
     </div>
+
+    <h3 style="font-size: 13px; font-weight: 800; margin: 16px 0 10px; text-transform: uppercase; color: var(--text-muted);">История заказов</h3>
+    <div id="history-list"></div>
   </div>
 
   <!-- НАВИГАЦИЯ -->
@@ -841,6 +856,9 @@
 
   <script>
     const MANAGER_USERNAME = 'kuratorRB';
+    const REVIEWS_CHANNEL = 'zm_store_reviews'; // Замените на ваш юзернейм канала с отзывами
+    const FAQ_CHANNEL = 'zm_store_faq';           // Замените на ваш юзернейм канала с FAQ/правилами
+
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
 
@@ -871,7 +889,6 @@
         products = await response.json();
       } catch (error) {
         console.warn('Ошибка загрузки JSON, используются резервные данные:', error);
-        // Запасные данные на случай открытия файла локально без сервера
         products = [
           { id: 1, category: 'accessory', brand: 'STONE ISLAND', title: 'STONE ISLAND AW2018 book', priceBYN: 69, priceRUB: 2090, size: 'OS', condition: 'Отличное', desc: 'Книга STONE ISLAND\nКоллекция: AW2018', img: 'https://images.unsplash.com/photo-1544441893-675973e31985?w=500', isPromo: true, isNew: false, stock: 1 },
           { id: 2, category: 'si', brand: 'STONE ISLAND', title: 'STONE ISLAND SS2019 Badge Art', priceBYN: 69, priceRUB: 2090, size: 'OS', condition: 'Новое', desc: 'Коллекционный патч с оригинальной упаковкой.', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500', isPromo: true, isNew: true, stock: 0 }
@@ -883,7 +900,6 @@
       updateCartUI();
     }
 
-    // СОХРАНЕНИЕ И ЗАГРУЗКА КОЛИЧЕСТВА ТОВАРОВ (STOCK)
     function saveProductsStock() {
       const stockMap = {};
       products.forEach(p => { stockMap[p.id] = p.stock; });
@@ -1248,6 +1264,8 @@
     }
 
     function openManagerChat() { window.open(`https://t.me/${MANAGER_USERNAME}`, '_blank'); }
+    function openReviewsLink() { window.open(`https://t.me/${REVIEWS_CHANNEL}`, '_blank'); }
+    function openFaqLink() { window.open(`https://t.me/${FAQ_CHANNEL}`, '_blank'); }
 
     function submitOrder() {
       if (!cart.length) return;
@@ -1263,7 +1281,6 @@
       if (!name || !phone) { alert('Заполните ФИО и Телефон!'); return; }
       if (selectedDeliveryMethod !== 'Самовывоз' && !address) { alert('Заполните адрес!'); return; }
 
-      // СМЕНА КОЛИЧЕСТВА ТОВАРА И СОХРАНЕНИЕ
       cart.forEach(item => {
         const prod = products.find(p => p.id === item.id);
         if (prod && prod.stock > 0) {
