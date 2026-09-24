@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "category": "accessory",
+    "brand": "STONE ISLAND",
+    "title": "STONE ISLAND AW2018 book",
+    "priceBYN": 69,
+    "priceRUB": 2090,
+    "size": "OS",
+    "condition": "Отличное",
+    "desc": "Книга STONE ISLAND\nКоллекция: AW2018",
+    "img": "https://i.imgur.com/ВашаСсылкаНаКартинку1.jpg",
+    "isPromo": true,
+    "isNew": false,
+    "stock": 1
+  },
+  {
+    "id": 2,
+    "category": "jacket",
+    "brand": "JORDAN",
+    "title": "Jordan Puffer Jacket Black",
+    "priceBYN": 290,
+    "priceRUB": 8550,
+    "size": "S, M",
+    "condition": "Идеальное",
+    "desc": "Зимний пуховик Jordan. Глянцевый материал, фирменный логотип.",
+    "img": "https://i.imgur.com/ВашаСсылкаНаКартинку2.jpg",
+    "isPromo": true,
+    "isNew": false,
+    "stock": 0
+  }
+]
